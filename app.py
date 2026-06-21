@@ -4,15 +4,14 @@ from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import FAISS
 
-os.environ["GOOGLE_API_KEY"] = "XYZ"  # Replace with your actual Google API key
+os.environ["GOOGLE_API_KEY"] = "AQ.Ab8RN6I8QtGtXoiSNxZITU6oZpBO3PhIYJIi4G1RWnmRqxzBeA"
 EMBED_MODEL = "models/gemini-embedding-001" 
 CHAT_MODEL = "gemini-2.5-flash"
-
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./chroma_db"
+PERSIST_DIR = "./faiss_db" 
 
 # Loaders
 def load_documents_from_folder(folder_path="."):
@@ -36,20 +35,17 @@ def split_documents(docs):
     )
     return splitter.split_documents(docs)
 
-# Vector Store with Gemini embeddings
+# Vector Store with Gemini embeddings (FAISS)
 def get_vector_store(docs=None):
     embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL)
     if docs:
-        vectorstore = Chroma.from_documents(
-            documents=docs,
-            embedding=embeddings,
-            persist_directory=PERSIST_DIR
-        )
+        # Create new FAISS index from documents
+        vectorstore = FAISS.from_documents(documents=docs, embedding=embeddings)
+        # Save locally
+        vectorstore.save_local(PERSIST_DIR)
     else:
-        vectorstore = Chroma(
-            embedding_function=embeddings,
-            persist_directory=PERSIST_DIR
-        )
+        # Load existing FAISS index
+        vectorstore = FAISS.load_local(PERSIST_DIR, embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
 # Answer function using Gemini chat model

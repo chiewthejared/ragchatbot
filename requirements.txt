@@ -1,5 +1,5 @@
-streamlit
-langchain-community
-langchain-text-splitters
-langchain-google-genai
-langchain-chroma
+streamlit==1.41.1
+langchain-community==0.3.14
+langchain-text-splitters==0.3.5
+langchain-google-genai==2.0.8
+faiss-cpu
