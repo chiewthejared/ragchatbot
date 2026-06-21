@@ -6,7 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 
-os.environ["GOOGLE_API_KEY"] = "AQ.Ab8RN6I8QtGtXoiSNxZITU6oZpBO3PhIYJIi4G1RWnmRqxzBeA"
+os.environ["GOOGLE_API_KEY"] = "GOOGLE_API_KEY"
 EMBED_MODEL = "models/gemini-embedding-001" 
 CHAT_MODEL = "gemini-2.5-flash"
 CHUNK_SIZE = 800
