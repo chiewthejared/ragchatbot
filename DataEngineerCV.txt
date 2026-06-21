@@ -1,0 +1,48 @@
+Chiew Jared
++1 (971) 443-8345 ? jaredchiew@gmail.com ? www.linkedin.com/in/chiewthejared/ ? www.github.com/chiewthejared 
+SUMMARY
+Data Engineering and Computer Science student at Arizona State University with experience in ETL workflows, SQL, BigQuery, and cloud data warehousing on Google Cloud Platform. Built data pipelines, analytics dashboards, and cloud-based solutions using Python and GCP technologies. Seeking Data Engineer or Cloud Data Engineering roles.
+EDUCATION
+Arizona State University (ASU) – Tempe, Arizona, USA   					             [2023 – 2026]
+- B.S in Computer Science with 3.56 GPA 
+- Dean’s List for 2026 Spring, 2025 Fall, 2024 Fall and 2023 Fall Semesters
+
+INTI International College – Selangor, Malaysia						             [2022 – 2023]
+- Completed first two years of a Computer Science degree 
+
+TECHNICAL SKILLS
+Languages: Python, SQL, Java, JavaScript, C/C++, Bash
+Data Engineering: BigQuery, PostgreSQL, ETL Pipelines, Data Warehousing
+Cloud & AI: Google Cloud Platform (BigQuery, Compute Engine, Cloud Storage), Vertex AI, AgentSpace
+Visualization & Analytics: Power BI, R, ggplot2, plotly, dplyr
+Tools: Git, GitHub, Linux/Unix, Jupyter Notebook, Microsoft Office
+WORK EXPERIENCE
+Sturge-Weber Foundation: Software Engineer				          [September 2025 – May 2026]
+- Implementing an IOS version of existing Android medical application
+- Application for children with neurological conditions, especially epilepsy and Sturge-Weber syndrome
+- Perfected Android application with extra features and improved UI
+Cloud Space: Data Engineering Intern						  [June 2025 – August 2025]
+- Google Cloud Premier Partner & 2025 Google Cloud Partner Of The Year – Malaysia
+- Built and maintained ETL workflows, SQL queries, and cloud data warehousing solutions using BigQuery and Google Cloud Platform
+- Assisted in organizing and transforming client datasets for cloud analytics and reporting workflows
+- Developed a proof-of-concept AI chatbot using Vertex AI and AgentSpace for client demonstrations and internal automation initiatives
+
+PROJECTS
+Sturge-Weber Foundation App						                   [August 2025 – May 2026]
+- Medical app for children with neurological conditions (Sturge-Weber syndrome)
+- Worked on UI and implementing features like Timers, Articles/Videos Page, Medical Analytics 
+
+COVID-19 Data Dashboard (Observable) 		  			              [February 2026 – April 2026]
+- Built a data-driven web dashboard using D3.js and JavaScript to process and visualize COVID-19 datasets from Our World in Data
+- Designed data transformation workflows for handling global case, death, and vaccination metrics
+Spotify Wrapped Analysis							          [February 2026 – March 2026]
+- Analyzed trends across Spotify datasets using R, ggplot2, plotly, and dplyr to compare characteristics of 2025 hits against all-time popular tracks
+-  Created interactive visualizations to identify patterns in popularity, genre, and audio features 
+
+ACHIEVEMENTS & EXTRACURRICULAR ENGAGEMENTS
+ASU Badminton Club   									      [2023 – Present]
+- 4-8th place (Quarter-finals) in Birdies’ Cup (2023 Fall)
+
+President (American University Program, INTI College) 					            [2022 – 2023]
+- Program leader and organizing chairperson of AUP events
+- Organized INTI’s first in-campus event (July 4th Barbeque) and first off-campus event (Homecoming Night) after COVID-19 pandemic

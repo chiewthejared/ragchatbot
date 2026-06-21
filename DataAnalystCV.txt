@@ -1,0 +1,48 @@
+Chiew Jared
++1 (971) 443-8345 ? jaredchiew@gmail.com ? www.linkedin.com/in/chiewthejared/ ? www.github.com/chiewthejared 
+SUMMARY
+Data Analyst and Computer Science student at Arizona State University with experience in SQL, Python, BigQuery, Power BI, and data visualization. Built interactive dashboards, ETL workflows, and analytics projects using real-world datasets and Google Cloud technologies. Seeking Data Analyst or Business Intelligence roles.
+EDUCATION
+Arizona State University (ASU) – Tempe, Arizona, USA   					             [2023 – 2026]
+- B.S in Computer Science with 3.56 GPA 
+- Dean’s List for 2026 Spring, 2025 Fall, 2024 Fall and 2023 Fall Semesters
+
+INTI International College – Selangor, Malaysia						             [2022 – 2023]
+- Completed the first two years of a Computer Science degree 
+
+TECHNICAL SKILLS
+Languages: Python, SQL, Java, JavaScript, C/C++, Bash
+Visualization & Analytics: Power BI, BigQuery, PostgreSQL, R, ggplot2, plotly, dplyr
+Cloud & AI: Google Cloud Platform (BigQuery, Compute Engine, Cloud Storage), Vertex AI, AgentSpace
+Tools: Git, GitHub, Linux/Unix, Microsoft Office
+WORK EXPERIENCE
+Sturge-Weber Foundation: Software Engineer				          [September 2025 – May 2026]
+- Implementing an iOS version of existing Android medical application
+- Application for children with neurological conditions, especially epilepsy and Sturge-Weber syndrome
+- Perfected Android application with extra features and improved UI
+Cloud Space: Data Analyst Intern							  [June 2025 – August 2025]
+- Google Cloud Premier Partner & 2025 Google Cloud Partner of The Year – Malaysia
+- Built and maintained ETL workflows, SQL queries, and cloud data warehousing solutions using BigQuery and Google Cloud Platform
+
+PROJECTS
+COVID-19 Analytics Dashboard (Power BI)						        [April 2026 – May 2026]
+- Built an interactive Power BI dashboard using COVID-19 datasets from Our World in Data
+- Created KPI cards, trend visualizations, geographic analysis, and filtering capabilities for country-level comparisons
+- Performed data cleaning and transformation using Power Query
+
+COVID-19 Data Dashboard (D3.js)						              [February 2026 – April 2026]
+- Developed an interactive web dashboard using JavaScript and D3.js to visualize global COVID-19 trends
+- Implemented dynamic charts and country-based filtering for exploratory analysis
+- Worked with real-world datasets containing cases, deaths, and vaccination metrics
+
+Spotify Wrapped Analysis							          [February 2026 – March 2026]
+- Analyzed trends across Spotify datasets using R, ggplot2, plotly, and dplyr to compare characteristics of 2025 hits against all-time popular tracks
+- Created interactive visualizations to identify patterns in popularity, genre, and audio features
+
+ACHIEVEMENTS & EXTRACURRICULAR ENGAGEMENTS
+ASU Badminton Club   									      [2023 – Present]
+- 4-8th place (Quarter-finals) in Birdies’ Cup (2023 Fall)
+
+President (American University Program, INTI College)					            [2022 – 2023]
+- Program leader and organizing chairperson of AUP events
+- Organized INTI’s first in-campus event (July 4th Barbeque) and first off-campus event (Homecoming Night) after COVID-19 pandemic
