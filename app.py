@@ -6,16 +6,16 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 
+# Configuration
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
-
-EMBED_MODEL = "models/gemini-embedding-001" 
-CHAT_MODEL = "gemini-2.5-flash"
+EMBED_MODEL = "models/text-embedding-004"
+CHAT_MODEL = "gemini-1.5-flash"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./faiss_db" 
+PERSIST_DIR = "./faiss_db"
 
 # Loaders
 def load_documents_from_folder(folder_path="."):
@@ -39,7 +39,7 @@ def split_documents(docs):
     )
     return splitter.split_documents(docs)
 
-# Vector Store with Gemini embeddings (FAISS)
+# Vector Store with FAISS
 def get_vector_store(docs=None):
     embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL)
     if docs:
@@ -49,7 +49,7 @@ def get_vector_store(docs=None):
         vectorstore = FAISS.load_local(PERSIST_DIR, embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
-# Answer function using Gemini chat model
+# Answer function
 def ask(question, vectorstore):
     retrieved = vectorstore.similarity_search(question, k=6)
     context = "\n\n".join([doc.page_content for doc in retrieved])
@@ -115,18 +115,25 @@ def load_vectorstore():
         with st.spinner("Indexing resumes... This may take a minute on the first run."):
             docs = load_documents_from_folder()
             if not docs:
-                st.warning("No text files found in the current directory.")
-                st.stop()
+                raise FileNotFoundError("No text files found in the current directory.")
             chunks = split_documents(docs)
             vectorstore = get_vector_store(chunks)
+        return vectorstore, True 
+    else:
+        with st.spinner("Loading existing vector store..."):
+            vectorstore = get_vector_store()
+        return vectorstore, False 
+try:
+    vectorstore, freshly_indexed = load_vectorstore()
+    if freshly_indexed:
         st.toast("✅ Indexing complete! Ready to answer questions.", icon="🎉")
     else:
-        st.toast("📂 Loading existing vector store...")
-        vectorstore = get_vector_store()
-    return vectorstore
+        st.toast("📂 Vector store loaded.", icon="✅")
+except FileNotFoundError as e:
+    st.warning(str(e))
+    st.stop()
 
-vectorstore = load_vectorstore()
-
+# Chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -151,7 +158,7 @@ if not st.session_state.messages:
     </style>
     """, unsafe_allow_html=True)
 
-# Display previous messages (sources removed)
+# Display previous messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
