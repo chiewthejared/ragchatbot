@@ -1,11 +1,14 @@
 venv/
 chroma_db/
+faiss_db/
 __pycache__/
 *.pyc
 *.pyo
 *.db
 *.sqlite3
 *.bin
+*.py
+*.txt
 .DS_Store
 Thumbs.db
 .env

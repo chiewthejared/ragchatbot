@@ -6,7 +6,10 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 
-os.environ["GOOGLE_API_KEY"] = "GOOGLE_API_KEY"
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+if not GOOGLE_API_KEY:
+    st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
+    st.stop()
 EMBED_MODEL = "models/gemini-embedding-001" 
 CHAT_MODEL = "gemini-2.5-flash"
 CHUNK_SIZE = 800
