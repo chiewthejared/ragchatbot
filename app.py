@@ -10,6 +10,7 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
+
 EMBED_MODEL = "models/gemini-embedding-001" 
 CHAT_MODEL = "gemini-2.5-flash"
 CHUNK_SIZE = 800
@@ -42,21 +43,16 @@ def split_documents(docs):
 def get_vector_store(docs=None):
     embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL)
     if docs:
-        # Create new FAISS index from documents
         vectorstore = FAISS.from_documents(documents=docs, embedding=embeddings)
-        # Save locally
         vectorstore.save_local(PERSIST_DIR)
     else:
-        # Load existing FAISS index
         vectorstore = FAISS.load_local(PERSIST_DIR, embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
 # Answer function using Gemini chat model
 def ask(question, vectorstore):
-    # Retrieve relevant chunks
     retrieved = vectorstore.similarity_search(question, k=6)
     context = "\n\n".join([doc.page_content for doc in retrieved])
-    sources = set([doc.metadata.get("source", "Unknown") for doc in retrieved])
 
     prompt = f"""You are a helpful assistant. Answer the user's question using ONLY the provided context.
 
@@ -99,11 +95,10 @@ Context:
 Question: {question}
 Answer:"""
 
-    # Gemini chat model
     llm = ChatGoogleGenerativeAI(model=CHAT_MODEL, temperature=0)
     response = llm.invoke(prompt)
     answer = response.content
-    return answer, sources
+    return answer
 
 # Streamlit UI
 st.set_page_config(page_title="Resume RAG Chatbot", page_icon="📄")
@@ -117,15 +112,16 @@ with st.sidebar:
 @st.cache_resource
 def load_vectorstore():
     if not Path(PERSIST_DIR).exists():
-        st.info("Indexing resumes... This may take a minute on the first run.")
-        docs = load_documents_from_folder()
-        if not docs:
-            st.warning("No text files found in the current directory.")
-            st.stop()
-        chunks = split_documents(docs)
-        vectorstore = get_vector_store(chunks)
-        st.success("Indexing complete!")
+        with st.spinner("Indexing resumes... This may take a minute on the first run."):
+            docs = load_documents_from_folder()
+            if not docs:
+                st.warning("No text files found in the current directory.")
+                st.stop()
+            chunks = split_documents(docs)
+            vectorstore = get_vector_store(chunks)
+        st.toast("✅ Indexing complete! Ready to answer questions.", icon="🎉")
     else:
+        st.toast("📂 Loading existing vector store...")
         vectorstore = get_vector_store()
     return vectorstore
 
@@ -155,12 +151,10 @@ if not st.session_state.messages:
     </style>
     """, unsafe_allow_html=True)
 
-# Display previous messages
+# Display previous messages (sources removed)
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-        if "sources" in msg and msg["sources"]:
-            st.caption(f"📁 Sources: {', '.join(msg['sources'])}")
 
 # Input box
 if prompt := st.chat_input("Ask a question about Jared's resumes..."):
@@ -171,14 +165,8 @@ if prompt := st.chat_input("Ask a question about Jared's resumes..."):
     with st.chat_message("assistant"):
         placeholder = st.empty()
         with st.spinner("Thinking..."):
-            answer, sources = ask(prompt, vectorstore)
+            answer = ask(prompt, vectorstore)
             placeholder.markdown(answer)
-            if sources:
-                st.caption(f"📁 Sources: {', '.join(sources)}")
 
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": answer,
-        "sources": sources
-    })
+    st.session_state.messages.append({"role": "assistant", "content": answer})
     st.rerun()
