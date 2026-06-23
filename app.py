@@ -11,11 +11,11 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
-EMBED_MODEL = "models/text-embedding-004"
-CHAT_MODEL = "gemini-1.5-flash"
+EMBED_MODEL = "models/embedding-001"
+CHAT_MODEL = "gemini-2.5-flash"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./faiss_db"
+PERSIST_DIR = "./faiss_db_v2"
 
 # Loaders
 def load_documents_from_folder(folder_path="."):
