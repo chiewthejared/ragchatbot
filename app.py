@@ -6,18 +6,15 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 
-# ---- API Key ----
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
-
-# ---- Configuration ----
 CHAT_MODEL = "gemini-1.5-flash"
-EMBED_MODEL = "embedding-001"          # ✅ correct model name (no 'models/' prefix)
+EMBED_MODEL = "models/gemini-embedding-001"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./faiss_db_v4"          # fresh folder to rebuild
+PERSIST_DIR = "./faiss_db_v5"
 
 # ---- Loaders ----
 def load_documents_from_folder(folder_path="."):
