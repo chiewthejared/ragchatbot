@@ -3,25 +3,23 @@ import os
 from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 
-# Configuration
+# ---- API Key ----
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
 
+# ---- Configuration ----
 CHAT_MODEL = "gemini-1.5-flash"
+EMBED_MODEL = "embedding-001"          # ✅ correct model name (no 'models/' prefix)
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./faiss_db_v3"   # new folder to force re-index
+PERSIST_DIR = "./faiss_db_v4"          # fresh folder to rebuild
 
-# Use a small, fast sentence-transformer model
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
-
-# Loaders
+# ---- Loaders ----
 def load_documents_from_folder(folder_path="."):
     docs = []
     folder = Path(folder_path)
@@ -43,9 +41,9 @@ def split_documents(docs):
     )
     return splitter.split_documents(docs)
 
-# Vector Store with local HuggingFace embeddings
+# ---- Vector Store ----
 def get_vector_store(docs=None):
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL)
     if docs:
         vectorstore = FAISS.from_documents(documents=docs, embedding=embeddings)
         vectorstore.save_local(PERSIST_DIR)
@@ -53,7 +51,7 @@ def get_vector_store(docs=None):
         vectorstore = FAISS.load_local(PERSIST_DIR, embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
-# Answer function (unchanged)
+# ---- Answer function ----
 def ask(question, vectorstore):
     retrieved = vectorstore.similarity_search(question, k=6)
     context = "\n\n".join([doc.page_content for doc in retrieved])
@@ -104,7 +102,7 @@ Answer:"""
     answer = response.content
     return answer
 
-# Streamlit UI (unchanged)
+# ---- Streamlit UI ----
 st.set_page_config(page_title="Resume RAG Chatbot", page_icon="📄")
 
 with st.sidebar:
