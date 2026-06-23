@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
 # Configuration
@@ -11,11 +12,14 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
-EMBED_MODEL = "models/text-embedding-004"
+
 CHAT_MODEL = "gemini-1.5-flash"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./faiss_db_v2"
+PERSIST_DIR = "./faiss_db_v3"   # new folder to force re-index
+
+# Use a small, fast sentence-transformer model
+EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
 
 # Loaders
 def load_documents_from_folder(folder_path="."):
@@ -39,9 +43,9 @@ def split_documents(docs):
     )
     return splitter.split_documents(docs)
 
-# Vector Store with FAISS
+# Vector Store with local HuggingFace embeddings
 def get_vector_store(docs=None):
-    embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL)
+    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
     if docs:
         vectorstore = FAISS.from_documents(documents=docs, embedding=embeddings)
         vectorstore.save_local(PERSIST_DIR)
@@ -49,7 +53,7 @@ def get_vector_store(docs=None):
         vectorstore = FAISS.load_local(PERSIST_DIR, embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
-# Answer function
+# Answer function (unchanged)
 def ask(question, vectorstore):
     retrieved = vectorstore.similarity_search(question, k=6)
     context = "\n\n".join([doc.page_content for doc in retrieved])
@@ -100,7 +104,7 @@ Answer:"""
     answer = response.content
     return answer
 
-# Streamlit UI
+# Streamlit UI (unchanged)
 st.set_page_config(page_title="Resume RAG Chatbot", page_icon="📄")
 
 with st.sidebar:
@@ -118,11 +122,12 @@ def load_vectorstore():
                 raise FileNotFoundError("No text files found in the current directory.")
             chunks = split_documents(docs)
             vectorstore = get_vector_store(chunks)
-        return vectorstore, True 
+        return vectorstore, True
     else:
         with st.spinner("Loading existing vector store..."):
             vectorstore = get_vector_store()
-        return vectorstore, False 
+        return vectorstore, False
+
 try:
     vectorstore, freshly_indexed = load_vectorstore()
     if freshly_indexed:
@@ -133,11 +138,9 @@ except FileNotFoundError as e:
     st.warning(str(e))
     st.stop()
 
-# Chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Animated head
 if not st.session_state.messages:
     st.title("📄 Jared's Resume Chatbot")
     st.markdown("Ask anything about Jared Chiew's experience, skills, education, and projects.")
@@ -158,12 +161,10 @@ if not st.session_state.messages:
     </style>
     """, unsafe_allow_html=True)
 
-# Display previous messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Input box
 if prompt := st.chat_input("Ask a question about Jared's resumes..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
