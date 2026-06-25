@@ -1,16 +1,32 @@
+# Virtual environments
 venv/
+env/
+.venv/
+
+# Vector databases (ignores ALL versions like v5, v6, v7)
+faiss_db_*/
 chroma_db/
-faiss_db/
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
-*.db
-*.sqlite3
-*.bin
-*.py
-*.txt
+*.pyd
+
+# Local environment variables
+.env
+
+# OS junk files
 .DS_Store
 Thumbs.db
-.env
+
+# IDE folders
 .vscode/
 .idea/
+
+# Database files
+*.db
+*.sqlite3
+
+# Streamlit secrets (if you have one)
+.streamlit/secrets.toml

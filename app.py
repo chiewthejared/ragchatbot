@@ -14,7 +14,7 @@ CHAT_MODEL = "gemini-2w.5-flash"
 EMBED_MODEL = "models/gemini-embedding-001"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-PERSIST_DIR = "./faiss_db_v5"
+PERSIST_DIR = "./faiss_db_v6"
 
 # Loaders
 def load_documents_from_folder(folder_path="."):
@@ -44,7 +44,7 @@ def load_documents_from_folder(folder_path="."):
             docs.extend(loaded)
         except Exception as e:
             st.warning(f"Could not load {file_path.name}: {e}")
-            
+
     return docs
 
 def split_documents(docs):
