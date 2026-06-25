@@ -10,13 +10,13 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
-CHAT_MODEL = "gemini-2.5-flash"
+CHAT_MODEL = "gemini-2w.5-flash"
 EMBED_MODEL = "models/gemini-embedding-001"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
 PERSIST_DIR = "./faiss_db_v5"
 
-# ---- Loaders ----
+# Loaders
 def load_documents_from_folder(folder_path="."):
     docs = []
     folder = Path(folder_path)
@@ -38,7 +38,7 @@ def split_documents(docs):
     )
     return splitter.split_documents(docs)
 
-# ---- Vector Store ----
+# Vector Store
 def get_vector_store(docs=None):
     embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL)
     if docs:
@@ -48,7 +48,7 @@ def get_vector_store(docs=None):
         vectorstore = FAISS.load_local(PERSIST_DIR, embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
-# ---- Answer function ----
+# Answer Function
 def ask(question, vectorstore):
     retrieved = vectorstore.similarity_search(question, k=6)
     context = "\n\n".join([doc.page_content for doc in retrieved])
@@ -99,7 +99,7 @@ Answer:"""
     answer = response.content
     return answer
 
-# ---- Streamlit UI ----
+# Streamlit UI
 st.set_page_config(page_title="Resume RAG Chatbot", page_icon="📄")
 
 with st.sidebar:
