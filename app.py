@@ -10,7 +10,7 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     st.error("GOOGLE_API_KEY not set. Please add it to Streamlit Secrets.")
     st.stop()
-CHAT_MODEL = "gemini-2w.5-flash"
+CHAT_MODEL = "gemini-2.5-flash"
 EMBED_MODEL = "models/gemini-embedding-001"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
