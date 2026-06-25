@@ -20,14 +20,31 @@ PERSIST_DIR = "./faiss_db_v5"
 def load_documents_from_folder(folder_path="."):
     docs = []
     folder = Path(folder_path)
+
+    # Process .txt files
     for file_path in folder.glob("*.txt"):
         if file_path.name == "requirements.txt":
             continue
-        loader = TextLoader(str(file_path), encoding="cp1252")
-        loaded = loader.load()
-        for doc in loaded:
-            doc.metadata["source"] = file_path.name
-        docs.extend(loaded)
+        try:
+            loader = TextLoader(str(file_path), encoding="cp1252")
+            loaded = loader.load()
+            for doc in loaded:
+                doc.metadata["source"] = file_path.name
+            docs.extend(loaded)
+        except Exception as e:
+            st.warning(f"Could not load {file_path.name}: {e}")
+
+    # Process .pdf files
+    for file_path in folder.glob("*.pdf"):
+        try:
+            loader = PyPDFLoader(str(file_path))
+            loaded = loader.load()
+            for doc in loaded:
+                doc.metadata["source"] = file_path.name
+            docs.extend(loaded)
+        except Exception as e:
+            st.warning(f"Could not load {file_path.name}: {e}")
+            
     return docs
 
 def split_documents(docs):
