@@ -124,6 +124,11 @@ with st.sidebar:
     if st.button("New Conversation", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
+    st.link_button(
+        label= "View Jared's Portfolio",
+        url="https://chiewthejared.github.io/portfolio/",
+        use_container_width=True
+    )
 
 @st.cache_resource
 def load_vectorstore():
